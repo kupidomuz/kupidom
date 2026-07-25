@@ -1,21 +1,71 @@
+import Link from "next/link";
+
 export default function Header() {
   return (
-    <header className="bg-white shadow">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <div className="text-3xl font-bold">
-          Kupi<span className="text-red-600">Dom</span>
-        </div>
+    <header className="absolute left-0 top-0 z-50 w-full">
+      <div className="mx-auto flex h-24 max-w-7xl items-center justify-between px-8">
 
-        <nav className="hidden gap-8 md:flex">
-          <a href="#">Купить</a>
-          <a href="#">Аренда</a>
-          <a href="#">Новостройки</a>
-          <a href="#">Коммерция</a>
+        {/* Логотип */}
+        <Link href="/" className="text-5xl font-bold tracking-tight">
+          <span className="text-white">Kupi</span>
+          <span className="text-red-600">Dom</span>
+        </Link>
+
+
+        {/* Меню */}
+        <nav className="hidden items-center gap-10 lg:flex">
+
+          <Link
+            href="/properties"
+            className="font-semibold text-white hover:text-red-400"
+          >
+            Купить
+          </Link>
+
+          <Link
+            href="/properties"
+            className="font-semibold text-white hover:text-red-400"
+          >
+            Аренда
+          </Link>
+
+          <Link
+            href="/properties"
+            className="font-semibold text-white hover:text-red-400"
+          >
+            Новостройки
+          </Link>
+
+          <Link
+            href="/properties"
+            className="font-semibold text-white hover:text-red-400"
+          >
+            Коммерция
+          </Link>
+
         </nav>
 
-        <button className="rounded-lg bg-red-600 px-5 py-2 text-white hover:bg-red-700">
-          Войти
-        </button>
+
+        {/* Кнопки */}
+<div className="flex items-center gap-4">
+
+  <Link
+    href="/properties"
+    className="rounded-xl border border-white px-6 py-3 font-semibold text-white transition hover:bg-white hover:text-black"
+  >
+    Каталог
+  </Link>
+
+
+  <Link
+    href="/login"
+    className="rounded-xl bg-red-600 px-6 py-3 font-semibold text-white transition hover:bg-red-700"
+  >
+    Войти
+  </Link>
+
+</div>
+
       </div>
     </header>
   );
