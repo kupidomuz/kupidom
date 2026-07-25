@@ -1,7 +1,7 @@
 import PropertyGallery from "@/components/PropertyGallery";
 import { getPropertyById } from "@/lib/propertyService";
 import ShareButton from "@/components/ShareButton";
-
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -43,9 +43,17 @@ export default async function PublicPropertyPage({
 
     <main className="mx-auto max-w-6xl px-6 py-10">
 
+      <div className="mb-6">
+        <Link
+          href="/properties"
+          className="inline-flex items-center rounded-xl bg-gray-200 px-5 py-3 text-gray-700 hover:bg-gray-300"
+        >
+          ← Назад к объектам
+        </Link>
+      </div>
+
 
       {/* Фотографии объекта */}
-
 <PropertyGallery
   images={property.images || []}
 />

@@ -8,7 +8,7 @@ import PropertyFilters from "./PropertyFilters";
 export default function PropertiesCatalog({
   properties,
 }: {
-  properties:any[];
+  properties: any[];
 }) {
 
 
@@ -40,7 +40,7 @@ export default function PropertiesCatalog({
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
 
 
-          {filtered.map((property:any)=>(
+          {filtered.map((property: any) => (
 
 
             <div
@@ -53,7 +53,7 @@ export default function PropertiesCatalog({
 
                 <img
                   src={property.images[0]}
-                  alt=""
+                  alt={property.title || "Объект"}
                   className="h-64 w-full object-cover"
                 />
 
@@ -71,9 +71,23 @@ export default function PropertiesCatalog({
               <div className="p-6">
 
 
-                <div className="font-bold text-red-600">
-                  {property.property_code}
+                <div className="flex flex-wrap items-center gap-2">
+
+
+                  <div className="font-bold text-red-600">
+                    {property.property_code}
+                  </div>
+
+
+                  <span className="rounded-full bg-green-100 px-3 py-1 text-sm text-green-700">
+                    {property.deal_type === "rent"
+                      ? "🏠 Аренда"
+                      : "🏷 Продажа"}
+                  </span>
+
+
                 </div>
+
 
 
                 <h2 className="mt-2 text-xl font-bold">
@@ -81,14 +95,17 @@ export default function PropertiesCatalog({
                 </h2>
 
 
+
                 <p className="mt-2 text-gray-500">
                   📍 {property.district}
                 </p>
 
 
+
                 <p className="mt-4 text-2xl font-bold text-red-600">
-  {Number(property.price).toLocaleString()} {property.currency || "$"}
-</p>
+                  {Number(property.price).toLocaleString()} {property.currency || "$"}
+                </p>
+
 
 
                 <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
@@ -104,6 +121,16 @@ export default function PropertiesCatalog({
                   </div>
 
 
+                  <div className="rounded-lg bg-gray-100 p-3">
+                    🏢 {property.floor}/{property.total_floors}
+                  </div>
+
+
+                  <div className="rounded-lg bg-gray-100 p-3">
+                    🏠 {property.property_type}
+                  </div>
+
+
                 </div>
 
 
@@ -114,6 +141,7 @@ export default function PropertiesCatalog({
                 >
                   Подробнее
                 </Link>
+
 
 
               </div>

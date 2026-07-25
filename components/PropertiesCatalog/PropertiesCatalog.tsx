@@ -74,9 +74,11 @@ const items = properties
 
   <div className="flex items-center justify-between">
 
-    <span className="text-sm font-bold text-red-600">
-      {property.property_code}
-    </span>
+    <span className="rounded-full bg-green-100 px-3 py-1 text-sm text-green-700">
+  {property.deal_type === "rent"
+    ? "🏠 Аренда"
+    : "🏷 Продажа"}
+</span>
 
 
     {property.exclusive && (
