@@ -32,6 +32,23 @@ export default function PropertyCard({
       <div className="p-5">
 
 
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+
+          <span className="font-bold text-red-600">
+            {property.property_code}
+          </span>
+
+
+          <span className="rounded-full bg-green-100 px-3 py-1 text-green-700">
+            {property.deal_type === "rent"
+              ? "🏠 Аренда"
+              : "🏷 Продажа"}
+          </span>
+
+        </div>
+
+
+
         <h2 className="text-xl font-bold">
           {property.title}
         </h2>
@@ -45,12 +62,13 @@ export default function PropertyCard({
 
 
         <p className="mt-2 text-lg font-semibold text-red-600">
-          {property.price} {property.currency}
+          {Number(property.price).toLocaleString()} {property.currency}
         </p>
 
 
 
-        <div className="mt-3 flex gap-3 text-sm text-gray-500">
+        <div className="mt-3 flex flex-wrap gap-3 text-sm text-gray-500">
+
 
           <span>
             🛏 {property.rooms} комн.
@@ -59,6 +77,16 @@ export default function PropertyCard({
 
           <span>
             📐 {property.area} м²
+          </span>
+
+
+          <span>
+            🏢 {property.floor}/{property.total_floors}
+          </span>
+
+
+          <span>
+            🏠 {property.property_type}
           </span>
 
 
