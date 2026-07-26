@@ -162,8 +162,12 @@ console.log("CURRENT USER:", user);
               </th>
 
               <th className="p-4 text-left">
-                Цена
-              </th>
+  Цена
+</th>
+
+<th className="p-4 text-left">
+  Агент
+</th>
 
               <th className="p-4 text-left">
                 Статус
@@ -316,7 +320,33 @@ console.log("CURRENT USER:", user);
 
               </td>
 
+<td className="p-4">
 
+  {property.agent ? (
+
+    <div>
+
+      <div className="font-medium">
+        👤 {property.agent.name}
+      </div>
+
+      {property.agent.phone && (
+        <div className="text-sm text-gray-500">
+          📞 {property.agent.phone}
+        </div>
+      )}
+
+    </div>
+
+  ) : (
+
+    <span className="text-gray-400">
+      Без агента
+    </span>
+
+  )}
+
+</td>
 
 
 

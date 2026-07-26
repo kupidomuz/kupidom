@@ -1,4 +1,4 @@
-import { getProperties } from "@/lib/propertyService";
+import { getPublicProperties } from "@/lib/propertyService";
 import PropertiesCatalog from "@/components/PropertiesCatalog";
 import Link from "next/link";
 
@@ -9,44 +9,41 @@ export default async function PropertiesPage({
   searchParams,
 }: {
   searchParams: Promise<{
-  dealType?: string;
-  type?: string;
-  district?: string;
-  rooms?: string;
-  priceFrom?: string;
-  priceTo?: string;
-}>;
+    dealType?: string;
+    type?: string;
+    district?: string;
+    rooms?: string;
+    priceFrom?: string;
+    priceTo?: string;
+  }>;
 }) {
 
 
   const params = await searchParams;
 
 
-  const properties = await getProperties();
+  const properties = await getPublicProperties();
 
 
 
-  const activeProperties = properties.filter(
+  const filteredProperties = properties.filter(
     (property: any) => {
 
 
-      if (property.status !== "active") {
+      if (params.dealType &&
+        property.deal_type !== params.dealType
+      ) {
         return false;
       }
 
-if (
-  params.dealType &&
-  property.deal_type !== params.dealType
-) {
-  return false;
-}
+
 
       if (
-  params.type &&
-  property.deal_type !== params.type
-) {
-  return false;
-}
+        params.type &&
+        property.property_type !== params.type
+      ) {
+        return false;
+      }
 
 
 
@@ -99,30 +96,37 @@ if (
 
   return (
 
-  <main className="mx-auto max-w-7xl px-6 py-10">
-
-    <div className="mb-6">
-      <Link
-        href="/"
-        className="inline-flex items-center rounded-xl bg-gray-200 px-5 py-3 text-gray-700 hover:bg-gray-300"
-      >
-        ← На главную
-      </Link>
-    </div>
+    <main className="mx-auto max-w-7xl px-6 py-10">
 
 
-    <h1 className="mb-8 text-4xl font-bold">
-      Каталог недвижимости
-    </h1>
+      <div className="mb-6">
+
+        <Link
+          href="/"
+          className="inline-flex items-center rounded-xl bg-gray-200 px-5 py-3 text-gray-700 hover:bg-gray-300"
+        >
+          ← На главную
+        </Link>
+
+      </div>
 
 
 
-    <PropertiesCatalog
-      properties={activeProperties}
-    />
+      <h1 className="mb-8 text-4xl font-bold">
+        Каталог недвижимости
+      </h1>
 
 
-  </main>
 
-);
+
+      <PropertiesCatalog
+        properties={filteredProperties}
+      />
+
+
+
+    </main>
+
+  );
+
 }

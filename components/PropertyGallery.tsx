@@ -66,13 +66,13 @@ export default function PropertyGallery({
     <div className="mb-10 rounded-3xl border bg-white p-6 shadow-sm">
 
 
-      <div className="relative">
+      <div className="relative flex h-[600px] items-center justify-center overflow-hidden rounded-2xl bg-gray-200">
 
 
         <img
           src={activeImage}
           alt="Фото объекта"
-          className="h-[500px] w-full rounded-2xl object-cover"
+          className="h-full w-full object-contain"
         />
 
 
@@ -83,7 +83,7 @@ export default function PropertyGallery({
 
             <button
               onClick={prevImage}
-              className="absolute left-4 top-1/2 rounded-full bg-black/50 px-4 py-2 text-2xl text-white"
+              className="absolute left-5 top-1/2 -translate-y-1/2 rounded-full bg-black/50 px-4 py-2 text-2xl text-white hover:bg-black/70"
             >
               ←
             </button>
@@ -91,7 +91,7 @@ export default function PropertyGallery({
 
             <button
               onClick={nextImage}
-              className="absolute right-4 top-1/2 rounded-full bg-black/50 px-4 py-2 text-2xl text-white"
+              className="absolute right-5 top-1/2 -translate-y-1/2 rounded-full bg-black/50 px-4 py-2 text-2xl text-white hover:bg-black/70"
             >
               →
             </button>
@@ -114,23 +114,25 @@ export default function PropertyGallery({
         {images.map(
           (image,index)=>(
 
-            <img
-  key={index}
-  src={image}
-  alt={`Фото ${index + 1}`}
-  onClick={() => {
-    alert("клик по фото " + index);
-    setActiveImage(image);
-  }}
-
-
-              className={`h-28 w-full cursor-pointer rounded-xl object-cover ${
+            <button
+              key={index}
+              onClick={() =>
+                setActiveImage(image)
+              }
+              className={`overflow-hidden rounded-xl ${
                 activeImage === image
-                ? "ring-4 ring-red-500"
-                : ""
+                  ? "ring-4 ring-red-500"
+                  : ""
               }`}
+            >
 
-            />
+              <img
+                src={image}
+                alt={`Фото ${index + 1}`}
+                className="h-28 w-full object-cover"
+              />
+
+            </button>
 
           )
         )}
