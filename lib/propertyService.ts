@@ -30,7 +30,53 @@ export async function getProperties() {
   }
 
 
-  return data || [];
+
+  const properties = await Promise.all(
+
+    data.map(async (property) => {
+
+
+      if (!property.agent_id) {
+
+        return {
+          ...property,
+          agent: null,
+        };
+
+      }
+
+
+
+      const { data: agent } =
+        await supabase
+          .from("users")
+          .select(
+            "id, name, phone, telegram"
+          )
+          .eq(
+            "id",
+            property.agent_id
+          )
+          .single();
+
+
+
+      return {
+
+        ...property,
+
+        agent,
+
+      };
+
+
+    })
+
+  );
+
+
+
+  return properties;
 
 }
 
@@ -51,7 +97,7 @@ export async function getPropertyById(
       "id",
       id
     )
-    .single();
+    .maybeSingle();
 
 
 
@@ -60,6 +106,19 @@ export async function getPropertyById(
     console.error(
       "GET PROPERTY ERROR:",
       error
+    );
+
+    return null;
+
+  }
+
+
+
+  if (!data) {
+
+    console.error(
+      "PROPERTY NOT FOUND:",
+      id
     );
 
     return null;
@@ -79,17 +138,17 @@ export async function getPropertyById(
       await supabase
         .from("users")
         .select(
-          "id, name, email, phone, telegram"
+          "id,name,email,phone,telegram"
         )
         .eq(
           "id",
           data.agent_id
         )
-        .single();
+        .maybeSingle();
 
 
 
-    agent = agentData;
+    agent = agentData || null;
 
   }
 
@@ -99,6 +158,83 @@ export async function getPropertyById(
     ...data,
     agent,
   };
+
+}export async function getSimilarProperties(
+  propertyId: string,
+  district: string,
+  dealType: string
+) {
+
+
+  const { data, error } = await supabase
+    .from("properties")
+    .select("*")
+    .eq(
+      "district",
+      district
+    )
+    .eq(
+      "deal_type",
+      dealType
+    )
+    .neq(
+      "id",
+      propertyId
+    )
+    .eq(
+      "status",
+      "active"
+    )
+    .limit(4);
+
+
+
+  if(error){
+
+    console.error(
+      "SIMILAR PROPERTIES ERROR:",
+      error
+    );
+
+    return [];
+
+  }
+
+
+
+  return data || [];
+
+}export async function getPublicProperties() {
+
+
+  const { data, error } = await supabase
+    .from("properties")
+    .select("*")
+    .eq(
+      "status",
+      "active"
+    )
+    .order(
+      "created_at",
+      {
+        ascending: false
+      }
+    );
+
+
+  if (error) {
+
+    console.error(
+      "GET PUBLIC PROPERTIES ERROR:",
+      error
+    );
+
+    return [];
+
+  }
+
+
+  return data || [];
 
 }
 
@@ -133,6 +269,7 @@ export async function getContactRequests() {
     return [];
 
   }
+  
 
 
 
@@ -196,5 +333,32 @@ export async function getContactRequests() {
 
 
   return requests;
+
+}
+export async function getCompanySettings() {
+
+
+  const { data, error } = await supabase
+    .from("company_settings")
+    .select("*")
+    .limit(1)
+    .single();
+
+
+
+  if (error) {
+
+    console.error(
+      "GET COMPANY SETTINGS ERROR:",
+      error
+    );
+
+    return null;
+
+  }
+
+
+
+  return data;
 
 }

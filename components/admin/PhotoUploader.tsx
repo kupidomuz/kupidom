@@ -4,7 +4,7 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 
 
-export default function EditPhotoUploader({
+export default function PhotoUploader({
   existingImages = [],
 }: {
   existingImages: string[];
@@ -28,9 +28,12 @@ export default function EditPhotoUploader({
     if (!e.target.files) return;
 
 
-    setFiles(
-      Array.from(e.target.files).slice(0,10)
-    );
+    const selected = Array.from(
+      e.target.files
+    ).slice(0, 10);
+
+
+    setFiles(selected);
 
   }
 
@@ -41,11 +44,141 @@ export default function EditPhotoUploader({
 
     setImages(
       images.filter(
-        (_,i)=>i!==index
+        (_, i) => i !== index
       )
     );
 
   }
+
+
+
+
+
+  function compressImage(
+    file: File
+  ): Promise<File> {
+
+
+    return new Promise((resolve) => {
+
+
+      const img = new Image();
+
+      const canvas = document.createElement(
+        "canvas"
+      );
+
+      const reader = new FileReader();
+
+
+
+      reader.onload = () => {
+
+        img.src = String(
+          reader.result
+        );
+
+      };
+
+
+
+      img.onload = () => {
+
+
+        const maxWidth = 2400;
+
+
+        let width = img.width;
+        let height = img.height;
+
+
+
+        if (width > maxWidth) {
+
+          height =
+            height *
+            (maxWidth / width);
+
+          width = maxWidth;
+
+        }
+
+
+
+        canvas.width = width;
+        canvas.height = height;
+
+
+
+        const ctx =
+          canvas.getContext(
+            "2d"
+          );
+
+
+
+        ctx?.drawImage(
+          img,
+          0,
+          0,
+          width,
+          height
+        );
+
+
+
+        canvas.toBlob(
+          (blob) => {
+
+
+            if (!blob) {
+
+              resolve(file);
+
+              return;
+
+            }
+
+
+
+            const newFile =
+              new File(
+                [blob],
+                file.name.replace(
+                  /\.[^/.]+$/,
+                  ".jpg"
+                ),
+                {
+                  type:"image/jpeg",
+                }
+              );
+
+
+            resolve(
+              newFile
+            );
+
+
+          },
+          "image/jpeg",
+          0.9
+        );
+
+
+      };
+
+
+
+      reader.readAsDataURL(
+        file
+      );
+
+
+    });
+
+  }
+
+
 
 
 
@@ -64,8 +197,15 @@ export default function EditPhotoUploader({
     for (const file of files) {
 
 
+      const optimized =
+        await compressImage(
+          file
+        );
+
+
+
       const fileName =
-        `${crypto.randomUUID()}-${file.name}`;
+        `${crypto.randomUUID()}.jpg`;
 
 
 
@@ -74,12 +214,16 @@ export default function EditPhotoUploader({
           .from("properties")
           .upload(
             fileName,
-            file
+            optimized,
+            {
+              contentType:
+                "image/jpeg",
+            }
           );
 
 
 
-      if(error){
+      if (error) {
 
         console.error(error);
 
@@ -89,12 +233,13 @@ export default function EditPhotoUploader({
 
 
 
-      const {data} =
+      const { data } =
         supabase.storage
           .from("properties")
           .getPublicUrl(
             fileName
           );
+
 
 
       uploaded.push(
@@ -117,8 +262,10 @@ export default function EditPhotoUploader({
 
     setUploading(false);
 
-
   }
+
+
+
 
 
 
@@ -126,12 +273,6 @@ export default function EditPhotoUploader({
   return (
 
     <div className="space-y-5">
-
-
-      <h2 className="text-2xl font-bold">
-        📷 Фотографии
-      </h2>
-
 
 
       <div className="grid gap-4 md:grid-cols-5">
@@ -173,6 +314,7 @@ export default function EditPhotoUploader({
 
 
 
+
       <input
         type="file"
         multiple
@@ -183,22 +325,30 @@ export default function EditPhotoUploader({
 
 
 
+      <p className="text-sm text-gray-500">
+        Максимум 10 фото. Фото будут автоматически оптимизированы.
+      </p>
+
+
+
+
 
       <button
         type="button"
         onClick={uploadPhotos}
         disabled={
           uploading ||
-          files.length===0
+          files.length === 0
         }
         className="rounded-xl bg-red-600 px-6 py-3 text-white disabled:opacity-50"
       >
 
         {uploading
-          ? "Загрузка..."
+          ? "Оптимизация и загрузка..."
           : "➕ Добавить фото"}
 
       </button>
+
 
 
 

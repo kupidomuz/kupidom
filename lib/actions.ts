@@ -14,10 +14,18 @@ export async function addProperty(
 
   const userCookie = cookieStore.get("user")?.value;
 
-  const currentUser = userCookie
-    ? JSON.parse(userCookie)
-    : null;
+  let currentUser = null;
 
+if (userCookie) {
+  try {
+    currentUser = JSON.parse(userCookie);
+  } catch (error) {
+    console.error(
+      "USER COOKIE ERROR:",
+      error
+    );
+  }
+}
 
 
   const { data: lastProperty } = await supabase
