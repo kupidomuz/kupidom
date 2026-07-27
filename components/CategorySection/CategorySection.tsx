@@ -10,28 +10,28 @@ export default function CategorySection() {
       title: "Купить",
       icon: "🏠",
       description: "Квартиры, дома и участки",
-      link: "/properties?dealType=sale",
+      link: "/properties?category=sale",
     },
 
     {
       title: "Аренда",
       icon: "🔑",
       description: "Долгосрочная и посуточная",
-      link: "/properties?dealType=rent",
+      link: "/properties?category=rent",
     },
 
     {
       title: "Новостройки",
       icon: "🏗️",
       description: "ЖК от застройщиков",
-      link: "/properties?type=Новостройка",
+      link: "/properties?category=newbuilding",
     },
 
     {
       title: "Коммерция",
       icon: "🏢",
       description: "Офисы, магазины и склады",
-      link: "/properties?type=Коммерция",
+      link: "/properties?category=commercial",
     },
 
   ];

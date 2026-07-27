@@ -68,7 +68,10 @@ export default function PropertiesCatalog({
 
 
 
+
+
               <div className="p-6">
+
 
 
                 <div className="flex flex-wrap items-center gap-2">
@@ -79,14 +82,52 @@ export default function PropertiesCatalog({
                   </div>
 
 
-                  <span className="rounded-full bg-green-100 px-3 py-1 text-sm text-green-700">
-                    {property.deal_type === "rent"
-                      ? "🏠 Аренда"
-                      : "🏷 Продажа"}
-                  </span>
+
+                  {property.deal_type === "rent" ? (
+
+                    <span className="rounded-full bg-green-100 px-3 py-1 text-sm text-green-700">
+                      🏠 Аренда
+                    </span>
+
+                  ) : (
+
+                    <span className="rounded-full bg-green-100 px-3 py-1 text-sm text-green-700">
+                      🏷 Продажа
+                    </span>
+
+                  )}
+
+
+
+
+
+                  {property.category === "newbuilding" && (
+
+                    <span className="rounded-full bg-orange-100 px-3 py-1 text-sm text-orange-700">
+                      🏗 Новостройка
+                    </span>
+
+                  )}
+
+
+
+
+
+                  {property.category === "commercial" && (
+
+                    <span className="rounded-full bg-purple-100 px-3 py-1 text-sm text-purple-700">
+                      🏢 Коммерция
+                    </span>
+
+                  )}
+
+
+
 
 
                 </div>
+
+
 
 
 
@@ -96,9 +137,13 @@ export default function PropertiesCatalog({
 
 
 
+
+
                 <p className="mt-2 text-gray-500">
                   📍 {property.district}
                 </p>
+
+
 
 
 
@@ -108,7 +153,10 @@ export default function PropertiesCatalog({
 
 
 
+
+
                 <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+
 
 
                   <div className="rounded-lg bg-gray-100 p-3">
@@ -116,9 +164,13 @@ export default function PropertiesCatalog({
                   </div>
 
 
+
+
                   <div className="rounded-lg bg-gray-100 p-3">
                     📐 {property.area} м²
                   </div>
+
+
 
 
                   <div className="rounded-lg bg-gray-100 p-3">
@@ -126,12 +178,18 @@ export default function PropertiesCatalog({
                   </div>
 
 
+
+
                   <div className="rounded-lg bg-gray-100 p-3">
                     🏠 {property.property_type}
                   </div>
 
 
+
+
                 </div>
+
+
 
 
 
@@ -144,19 +202,24 @@ export default function PropertiesCatalog({
 
 
 
+
               </div>
+
 
 
             </div>
 
 
+
           ))}
+
 
 
         </div>
 
 
       )}
+
 
 
     </>
