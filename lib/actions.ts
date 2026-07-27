@@ -9,7 +9,10 @@ import { supabase } from "@/lib/supabase";
 export async function addProperty(
   formData: FormData
 ) {
-
+console.log(
+  "CATEGORY TEST:",
+  formData.get("category")
+);
   const cookieStore = await cookies();
 
   const userCookie = cookieStore.get("user")?.value;
@@ -149,8 +152,9 @@ if (userCookie) {
 deal_type: String(
   formData.get("dealType") || ""
 ),
-
-
+category: String(
+  formData.get("category") || ""
+),
 property_type: String(
   formData.get("propertyType") || ""
 ),

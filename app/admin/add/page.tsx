@@ -101,7 +101,27 @@ export default function PropertyForm() {
 
           </select>
 
+<select
+  name="category"
+  className="rounded-xl border p-3"
+>
+  <option value="sale">
+    🏠 Купить
+  </option>
 
+  <option value="rent">
+    🔑 Аренда
+  </option>
+
+  <option value="newbuilding">
+    🏗 Новостройки
+  </option>
+
+  <option value="commercial">
+    🏢 Коммерция
+  </option>
+
+</select>
 
           <select
   name="propertyType"

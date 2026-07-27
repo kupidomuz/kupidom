@@ -12,6 +12,7 @@ export default function PropertyFilters({
 }) {
 
 
+  const [category, setCategory] = useState("all");
   const [deal, setDeal] = useState("all");
   const [district, setDistrict] = useState("all");
   const [rooms, setRooms] = useState("all");
@@ -24,6 +25,17 @@ export default function PropertyFilters({
 
 
     let result = [...properties];
+
+
+
+    if (category !== "all") {
+
+      result = result.filter(
+        (item) =>
+          item.category === category
+      );
+
+    }
 
 
 
@@ -112,7 +124,39 @@ export default function PropertyFilters({
     <div className="mb-8 rounded-2xl border bg-white p-5 shadow">
 
 
-      <div className="grid gap-4 md:grid-cols-5">
+      <div className="grid gap-4 md:grid-cols-6">
+
+
+
+        <select
+          value={category}
+          onChange={(e)=>setCategory(e.target.value)}
+          className="rounded-xl border p-3"
+        >
+
+          <option value="all">
+            Все категории
+          </option>
+
+          <option value="sale">
+            🏠 Купить
+          </option>
+
+          <option value="rent">
+            🔑 Аренда
+          </option>
+
+          <option value="newbuilding">
+            🏗 Новостройки
+          </option>
+
+          <option value="commercial">
+            🏢 Коммерция
+          </option>
+
+        </select>
+
+
 
 
 
@@ -127,12 +171,12 @@ export default function PropertyFilters({
           </option>
 
           <option value="sale">
-  Продажа
-</option>
+            Продажа
+          </option>
 
-<option value="rent">
-  Аренда
-</option>
+          <option value="rent">
+            Аренда
+          </option>
 
         </select>
 
@@ -153,7 +197,7 @@ export default function PropertyFilters({
 
           {districts.map(
             (item:any)=>(
-              
+
               <option
                 key={item}
                 value={item}
@@ -205,17 +249,11 @@ export default function PropertyFilters({
 
 
         <input
-
           type="number"
-
           placeholder="Цена от"
-
           value={minPrice}
-
           onChange={(e)=>setMinPrice(e.target.value)}
-
           className="rounded-xl border p-3"
-
         />
 
 
@@ -223,17 +261,11 @@ export default function PropertyFilters({
 
 
         <input
-
           type="number"
-
           placeholder="Цена до"
-
           value={maxPrice}
-
           onChange={(e)=>setMaxPrice(e.target.value)}
-
           className="rounded-xl border p-3"
-
         />
 
 

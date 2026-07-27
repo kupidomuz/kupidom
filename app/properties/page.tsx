@@ -9,6 +9,7 @@ export default async function PropertiesPage({
   searchParams,
 }: {
   searchParams: Promise<{
+    category?: string;
     dealType?: string;
     type?: string;
     district?: string;
@@ -30,7 +31,17 @@ export default async function PropertiesPage({
     (property: any) => {
 
 
-      if (params.dealType &&
+      if (
+        params.category &&
+        property.category !== params.category
+      ) {
+        return false;
+      }
+
+
+
+      if (
+        params.dealType &&
         property.deal_type !== params.dealType
       ) {
         return false;
