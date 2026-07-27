@@ -8,6 +8,8 @@ import {
   LayoutDashboard,
   LogOut,
   ClipboardList,
+  Users,
+  BarChart3,
 } from "lucide-react";
 
 import UserInfo from "./UserInfo";
@@ -16,7 +18,9 @@ import { useEffect, useState } from "react";
 
 export default function AdminMenu() {
 
+
   const [user, setUser] = useState<any>(null);
+
 
 
   useEffect(() => {
@@ -28,6 +32,7 @@ export default function AdminMenu() {
     }
 
   }, []);
+
 
 
 
@@ -44,11 +49,13 @@ export default function AdminMenu() {
 
 
 
+
   if (!user) return null;
 
 
 
   const isAdmin = user.role === "admin";
+
 
 
 
@@ -71,13 +78,17 @@ export default function AdminMenu() {
 
 
 
+
       <div className="mb-6">
         <UserInfo />
       </div>
 
 
 
+
+
       <nav className="space-y-2">
+
 
 
         {isAdmin && (
@@ -94,6 +105,8 @@ export default function AdminMenu() {
 
 
 
+
+
         <Link
           href="/admin/properties"
           className="flex items-center gap-3 rounded-xl p-3 transition hover:bg-red-50 hover:text-red-600"
@@ -101,6 +114,42 @@ export default function AdminMenu() {
           <Building2 size={22} />
           Объекты
         </Link>
+
+
+
+
+
+
+        {isAdmin && (
+
+          <Link
+            href="/admin/agents"
+            className="flex items-center gap-3 rounded-xl p-3 transition hover:bg-red-50 hover:text-red-600"
+          >
+            <Users size={22} />
+            Агенты
+          </Link>
+
+        )}
+
+
+
+
+
+
+        {isAdmin && (
+
+          <Link
+            href="/admin/analytics"
+            className="flex items-center gap-3 rounded-xl p-3 transition hover:bg-red-50 hover:text-red-600"
+          >
+            <BarChart3 size={22} />
+            Аналитика
+          </Link>
+
+        )}
+
+
 
 
 
@@ -120,6 +169,9 @@ export default function AdminMenu() {
 
 
 
+
+
+
         <Link
           href="/admin/add"
           className="flex items-center gap-3 rounded-xl bg-red-600 p-3 text-white transition hover:bg-red-700"
@@ -127,6 +179,9 @@ export default function AdminMenu() {
           <PlusCircle size={22} />
           Добавить объект
         </Link>
+
+
+
 
 
 
@@ -142,6 +197,9 @@ export default function AdminMenu() {
 
 
 
+
+
+
         <button
           onClick={logout}
           className="flex w-full items-center gap-3 rounded-xl p-3 text-left transition hover:bg-red-50 hover:text-red-600"
@@ -149,6 +207,8 @@ export default function AdminMenu() {
           <LogOut size={22} />
           Выйти
         </button>
+
+
 
 
 

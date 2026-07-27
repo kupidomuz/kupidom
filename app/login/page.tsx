@@ -19,38 +19,51 @@ export default function LoginPage() {
   async function login() {
 
 
-    const { data, error } = await supabase
-      .from("users")
-      .select("*")
-      .eq("email", email)
-      .eq("password", password)
-      .single();
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("email", email)
+    .eq("password", password)
+    .single();
 
 
 
-    if (error || !data) {
+  if (error || !data) {
 
-      alert("Неверный логин или пароль");
+    alert("Неверный логин или пароль");
 
-      return;
-
-    }
-
-
-
-    localStorage.setItem(
-  "user",
-  JSON.stringify(data)
-);
-
-document.cookie =
-  `user=${encodeURIComponent(JSON.stringify(data))}; path=/`;
-
-
-    router.push("/admin/properties");
-
+    return;
 
   }
+
+
+
+  // Проверка статуса пользователя
+  if (data.status === "blocked") {
+
+    alert("Доступ запрещён. Обратитесь к администратору.");
+
+    return;
+
+  }
+
+
+
+  localStorage.setItem(
+    "user",
+    JSON.stringify(data)
+  );
+
+
+  document.cookie =
+    `user=${encodeURIComponent(JSON.stringify(data))}; path=/`;
+
+
+
+  router.push("/admin/properties");
+
+
+}
 
 
 
