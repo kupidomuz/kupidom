@@ -1,153 +1,108 @@
 import Link from "next/link";
 import { getProperties } from "@/lib/propertyService";
 
-
 export default async function PropertiesCatalog() {
-
   const properties = await getProperties();
 
-
-const items = properties
-  .filter(
-    (property:any) =>
-      property.status === "active"
-  )
-  .slice(0, 6);
-
+  const items = properties
+    .filter((property: any) => property.status === "active")
+    .slice(0, 6);
 
   return (
+    <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-16 lg:px-8">
 
-    <section className="mx-auto max-w-7xl px-8 py-16">
+      {/* Заголовок */}
+      <div className="mb-6 flex items-center justify-between gap-3 sm:mb-10">
 
-
-      <div className="mb-10 flex items-center justify-between">
-
-        <h2 className="text-4xl font-bold">
+        <h2 className="text-3xl font-bold sm:text-4xl">
           Новые объекты
         </h2>
 
-
         <Link
           href="/properties"
-          className="rounded-xl bg-red-600 px-6 py-3 text-white"
+          className="shrink-0 rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white sm:px-6 sm:py-3 sm:text-base"
         >
           Все объекты
         </Link>
 
       </div>
 
+      {/* Карточки */}
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 md:gap-8">
 
-
-      <div className="grid gap-8 md:grid-cols-3">
-
-
-        {items.map((property:any)=>(
-
-
+        {items.map((property: any) => (
           <Link
             key={property.id}
             href={`/property/${property.id}`}
-            className="overflow-hidden rounded-2xl border bg-white shadow hover:shadow-lg"
+            className="overflow-hidden rounded-2xl border bg-white shadow transition hover:shadow-lg"
           >
 
-
+            {/* Фото */}
             {property.images?.length > 0 ? (
-
               <img
                 src={property.images[0]}
                 alt={property.title}
-                className="h-64 w-full object-cover"
+                className="h-52 w-full object-cover sm:h-60 md:h-64"
               />
-
             ) : (
-
-              <div className="flex h-64 items-center justify-center bg-gray-100 text-gray-400">
+              <div className="flex h-52 items-center justify-center bg-gray-100 text-gray-400 sm:h-60 md:h-64">
                 Нет фото
               </div>
-
             )}
 
+            {/* Информация */}
+            <div className="p-4 sm:p-5">
 
+              {/* Тип сделки */}
+              <div className="mb-3 flex flex-wrap gap-2">
 
-            <div className="p-5">
+                <span className="rounded-full bg-green-100 px-3 py-1 text-xs text-green-700 sm:text-sm">
+                  {property.deal_type === "rent"
+                    ? "🏠 Аренда"
+                    : "🏷 Продажа"}
+                </span>
 
+                {property.exclusive && (
+                  <span className="rounded-full bg-yellow-100 px-3 py-1 text-xs text-yellow-700">
+                    ⭐ Эксклюзив
+                  </span>
+                )}
 
-  <div className="flex items-center justify-between">
+              </div>
 
-    <span className="rounded-full bg-green-100 px-3 py-1 text-sm text-green-700">
-  {property.deal_type === "rent"
-    ? "🏠 Аренда"
-    : "🏷 Продажа"}
-</span>
+              {/* Название */}
+              <h3 className="mb-4 line-clamp-2 text-lg font-bold sm:text-xl">
+                {property.title}
+              </h3>
 
+              {/* Характеристики */}
+              <div className="grid grid-cols-2 gap-2 text-sm">
 
-    {property.exclusive && (
-      <span className="rounded-full bg-yellow-100 px-3 py-1 text-xs text-yellow-700">
-        ⭐ Эксклюзив
-      </span>
-    )}
+                <div className="rounded-lg bg-gray-100 p-2">
+                  🛏 {property.rooms} комн.
+                </div>
 
-  </div>
+                <div className="rounded-lg bg-gray-100 p-2">
+                  📐 {property.area} м²
+                </div>
 
+                <div className="rounded-lg bg-gray-100 p-2">
+                  🏢 {property.floor}/{property.total_floors}
+                </div>
 
+                <div className="rounded-lg bg-gray-100 p-2">
+                  🏠 {property.property_type}
+                </div>
 
-  <h3 className="mt-3 text-xl font-bold">
-    {property.title}
-  </h3>
+              </div>
 
-
-
-  <p className="mt-2 text-gray-500">
-    📍 {property.district}
-  </p>
-
-
-
-  <div className="mt-4 grid grid-cols-2 gap-2 text-sm">
-
-
-    <div className="rounded-lg bg-gray-100 p-2">
-      🛏 {property.rooms} комн.
-    </div>
-
-
-    <div className="rounded-lg bg-gray-100 p-2">
-      📐 {property.area} м²
-    </div>
-
-
-    <div className="rounded-lg bg-gray-100 p-2">
-      🏢 {property.floor}/{property.total_floors}
-    </div>
-
-
-    <div className="rounded-lg bg-gray-100 p-2">
-      🏠 {property.property_type}
-    </div>
-
-
-  </div>
-
-
-<p className="mt-4 text-xl font-bold text-red-600">
-  {Number(property.price).toLocaleString()} {property.currency || "$"}
-</p>
-
-
-</div>
-
+            </div>
 
           </Link>
-
-
         ))}
-
 
       </div>
 
-
     </section>
-
   );
-
 }

@@ -12,6 +12,7 @@ export default async function AgentsPage() {
     .order("created_at", {
       ascending: false,
     });
+    console.log("PRODUCTION AGENTS:", agents);
 console.log("AGENTS:", agents);
 
 

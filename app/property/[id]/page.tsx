@@ -1,512 +1,311 @@
 import PropertyGallery from "@/components/PropertyGallery";
 import {
   getPropertyById,
-  getCompanySettings
+  getCompanySettings,
 } from "@/lib/propertyService";
 import ShareButton from "@/components/ShareButton";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
-
-
 export default async function PublicPropertyPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-
-
   const { id } = await params;
 
-
   const property = await getPropertyById(id);
-
-const company = await getCompanySettings();
+  const company = await getCompanySettings();
 
   if (!property) {
-
     return (
-
-      <main className="p-10 text-center">
-
-        <h1 className="text-3xl font-bold">
+      <main className="px-4 py-10 text-center sm:px-6">
+        <h1 className="text-2xl font-bold sm:text-3xl">
           Объект не найден
         </h1>
-
       </main>
-
     );
-
   }
 
-
-
   return (
+    <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-10">
 
-    <main className="mx-auto max-w-6xl px-6 py-10">
-
-      <div className="mb-6">
+      {/* Назад */}
+      <div className="mb-5">
         <Link
           href="/properties"
-          className="inline-flex items-center rounded-xl bg-gray-200 px-5 py-3 text-gray-700 hover:bg-gray-300"
+          className="inline-flex items-center rounded-xl bg-gray-200 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-300 sm:px-5 sm:py-3 sm:text-base"
         >
           ← Назад к объектам
         </Link>
       </div>
 
-
-      {/* Фотографии объекта */}
-<PropertyGallery
-  images={property.images || []}
-/>
-
-
-
-    <div className="mb-8">
-
-
-  <h1 className="text-4xl font-bold">
-
-    {property.rooms
-      ? `${property.rooms}-комнатная `
-      : ""
-    }
-
-    {property.property_type || "Недвижимость"}
-
-  </h1>
-
-
-
-  <p className="mt-3 text-lg text-gray-500">
-    📍 {property.district}
-  </p>
-
-
-
-  <p className="mt-5 text-4xl font-bold text-red-600">
-
-    {Number(property.price).toLocaleString()} {property.currency || "$"}
-
-  </p>
-
-
-
-
-  <div className="mt-5 flex flex-wrap gap-3">
-
-
-    <span className="rounded-full bg-green-100 px-4 py-2 text-green-700">
-
-      {property.deal_type === "rent"
-        ? "🏠 Аренда"
-        : "🏷 Продажа"}
-
-    </span>
-
-
-
-    {property.status === "sold" && (
-
-      <span className="rounded-full bg-gray-200 px-4 py-2 text-gray-700">
-        ✅ Продан
-      </span>
-
-    )}
-
-
-
-    {property.exclusive && (
-
-      <span className="rounded-full bg-red-100 px-4 py-2 text-red-700">
-        ⭐ Эксклюзив
-      </span>
-
-    )}
-
-
-  </div>
-
-
-
-
-
-  <div className="mt-6 grid gap-4 md:grid-cols-4">
-
-
-    {property.rooms && (
-
-      <div className="rounded-xl bg-gray-100 p-4">
-
-        🛏 {property.rooms} комнат
-
-      </div>
-
-    )}
-
-
-
-    {property.area && (
-
-      <div className="rounded-xl bg-gray-100 p-4">
-
-        📐 {property.area} м²
-
-      </div>
-
-    )}
-
-
-
-
-    {property.floor && property.total_floors && (
-
-      <div className="rounded-xl bg-gray-100 p-4">
-
-        🏢 {property.floor}/{property.total_floors} этаж
-
-      </div>
-
-    )}
-
-
-
-
-    {property.property_type && (
-
-      <div className="rounded-xl bg-gray-100 p-4">
-
-        🏠 {property.property_type}
-
-      </div>
-
-    )}
-
-
-
-  </div>
-
-
-
-
-
-  <p className="mt-5 text-sm text-gray-400">
-
-    ID: {property.property_code}
-
-  </p>
-
-
-</div>
-
-
-
-
-
-
-      
-
-    
-
-
-
-
-
-
-
-      <div className="mt-8 grid gap-5 md:grid-cols-2">
-
-
-  {/* Компания */}
-
-  {company && (
-
-    <div className="rounded-2xl border bg-white p-6 shadow-sm">
-
-      <h3 className="mb-2 text-xl font-bold">
-        🏢 {company.company_name}
-      </h3>
-
-      <p className="mb-5 text-gray-500">
-        Агентство недвижимости
-      </p>
-
-
-      <div className="flex flex-wrap gap-3">
-
-
-        {company.phone && (
-
-          <a
-            href={`tel:${company.phone}`}
-            className="rounded-xl bg-red-600 px-5 py-3 font-medium text-white hover:bg-red-700"
-          >
-            📞 Позвонить
-          </a>
-
-        )}
-
-
-
-        {company.whatsapp && (
-
-          <a
-            href={`https://wa.me/${company.whatsapp.replace("+","")}`}
-            target="_blank"
-            className="rounded-xl bg-green-500 px-5 py-3 font-medium text-white"
-          >
-            💬 WhatsApp
-          </a>
-
-        )}
-
-
-
-        {company.telegram && (
-
-          <a
-            href={`https://t.me/${company.telegram.replace("@","")}`}
-            target="_blank"
-            className="rounded-xl bg-blue-500 px-5 py-3 font-medium text-white"
-          >
-            ✈ Telegram
-          </a>
-
-        )}
-
-
-      </div>
-
-
-    </div>
-
-  )}
-
-
-
-
-  {/* Агент */}
-
-  {property.agent && (
-
-    <div className="rounded-2xl border bg-white p-6 shadow-sm">
-
-
-      <h3 className="mb-2 text-xl font-bold">
-        👤 {property.agent.name}
-      </h3>
-
-
-      <p className="mb-5 text-gray-500">
-        Ваш специалист по объекту
-      </p>
-
-
-
-      <div className="flex flex-wrap gap-3">
-
-
-        {property.agent.phone && (
-
-          <a
-            href={`tel:${property.agent.phone}`}
-            className="rounded-xl bg-gray-900 px-5 py-3 font-medium text-white"
-          >
-            📞 Позвонить
-          </a>
-
-        )}
-
-
-
-        {property.agent.phone && (
-
-          <a
-            href={`https://wa.me/${property.agent.phone.replace("+","")}`}
-            target="_blank"
-            className="rounded-xl bg-green-500 px-5 py-3 font-medium text-white"
-          >
-            💬 WhatsApp
-          </a>
-
-        )}
-
-
-
-        {property.agent.telegram && (
-
-          <a
-            href={`https://t.me/${property.agent.telegram.replace("@","")}`}
-            target="_blank"
-            className="rounded-xl bg-blue-500 px-5 py-3 font-medium text-white"
-          >
-            ✈ Telegram
-          </a>
-
-        )}
-
-
-      </div>
-
-
-    </div>
-
-  )}
-
-
-</div>
-
-
-
-<div className="mt-5">
-  <ShareButton />
-</div>
-
-
-
-
-
-
-      <div className="mt-8 rounded-2xl border bg-white p-8 shadow">
-
-
-  <h2 className="mb-6 text-2xl font-bold">
-    📋 Информация
-  </h2>
-
-
-
-  <div className="grid gap-5 md:grid-cols-2">
-
-
-    {property.price && (
-
-      <p>
-        <b>Цена:</b>{" "}
-        {Number(property.price).toLocaleString()} {property.currency || "$"}
-      </p>
-
-    )}
-
-
-
-    {property.property_type && (
-
-      <p>
-        <b>Тип:</b> {property.property_type}
-      </p>
-
-    )}
-
-
-
-    {property.rooms && (
-
-      <p>
-        <b>Комнаты:</b> {property.rooms}
-      </p>
-
-    )}
-
-
-
-    {property.area && (
-
-      <p>
-        <b>Площадь:</b> {property.area} м²
-      </p>
-
-    )}
-
-
-
-    {property.floor && property.total_floors && (
-
-      <p>
-        <b>Этаж:</b> {property.floor}/{property.total_floors}
-      </p>
-
-    )}
-
-
-
-    {property.renovation && 
-     property.renovation !== "Ремонт не указан" && (
-
-      <p>
-        <b>Ремонт:</b> {property.renovation}
-      </p>
-
-    )}
-
-
-
-    {property.residential_complex && (
-
-      <p>
-        <b>ЖК:</b> {property.residential_complex}
-      </p>
-
-    )}
-
-
-
-    {property.address && (
-
-      <p>
-        <b>Адрес:</b> {property.address}
-      </p>
-
-    )}
-
-
-
-    {property.building_type && (
-
-      <p>
-        <b>Тип дома:</b> {property.building_type}
-      </p>
-
-    )}
-
-
-
-  </div>
-
-
-</div>
-
-
-
-
-
-
-
-      <div className="mt-8 rounded-2xl border bg-white p-8 shadow">
-
-
-        <h2 className="mb-4 text-2xl font-bold">
-
-          📝 Описание
-
-        </h2>
-
-
-        <p>
-
-          {property.description || "Нет описания"}
-
+      {/* Фотографии */}
+      <PropertyGallery images={property.images || []} />
+
+      {/* Основная информация */}
+      <div className="mb-6 mt-6 sm:mb-8 sm:mt-8">
+
+        <h1 className="text-2xl font-bold leading-tight sm:text-3xl lg:text-4xl">
+          {property.rooms
+            ? `${property.rooms}-комнатная `
+            : ""}
+          {property.property_type || "Недвижимость"}
+        </h1>
+
+        <p className="mt-3 text-2xl font-bold text-red-600 sm:text-3xl">
+          {Number(property.price).toLocaleString()}{" "}
+          {property.currency || "$"}
         </p>
 
+        {/* Статусы */}
+        <div className="mt-4 flex flex-wrap gap-2">
+
+          <span className="rounded-full bg-green-100 px-3 py-1.5 text-sm text-green-700 sm:px-4 sm:py-2">
+            {property.deal_type === "rent"
+              ? "🏠 Аренда"
+              : "🏷 Продажа"}
+          </span>
+
+          {property.status === "sold" && (
+            <span className="rounded-full bg-gray-200 px-3 py-1.5 text-sm text-gray-700 sm:px-4 sm:py-2">
+              ✅ Продан
+            </span>
+          )}
+
+          {property.exclusive && (
+            <span className="rounded-full bg-red-100 px-3 py-1.5 text-sm text-red-700 sm:px-4 sm:py-2">
+              ⭐ Эксклюзив
+            </span>
+          )}
+
+        </div>
 
       </div>
 
+      {/* Характеристики */}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
 
+        {property.rooms && (
+          <div className="rounded-xl bg-gray-100 p-3 text-sm sm:p-4 sm:text-base">
+            🛏 {property.rooms} комнат
+          </div>
+        )}
 
+        {property.area && (
+          <div className="rounded-xl bg-gray-100 p-3 text-sm sm:p-4 sm:text-base">
+            📐 {property.area} м²
+          </div>
+        )}
+
+        {property.floor && property.total_floors && (
+          <div className="rounded-xl bg-gray-100 p-3 text-sm sm:p-4 sm:text-base">
+            🏢 {property.floor}/{property.total_floors} этаж
+          </div>
+        )}
+
+        {property.property_type && (
+          <div className="rounded-xl bg-gray-100 p-3 text-sm sm:p-4 sm:text-base">
+            🏠 {property.property_type}
+          </div>
+        )}
+
+      </div>
+
+      {/* ID */}
+      <div className="mt-4 text-sm text-gray-500">
+        ID: {property.property_code}
+      </div>
+
+      {/* Контакты */}
+      <div className="mt-6 grid gap-4 sm:mt-8 md:grid-cols-2">
+
+        {/* Компания */}
+        {company && (
+          <div className="rounded-2xl border bg-white p-5 shadow-sm sm:p-6">
+
+            <h3 className="mb-2 text-lg font-bold sm:text-xl">
+              🏢 {company.company_name}
+            </h3>
+
+            <p className="mb-4 text-sm text-gray-500 sm:mb-5 sm:text-base">
+              Агентство недвижимости
+            </p>
+
+            <div className="flex flex-wrap gap-2 sm:gap-3">
+
+              {company.phone && (
+                <a
+                  href={`tel:${company.phone}`}
+                  className="rounded-xl bg-red-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-red-700 sm:px-5 sm:py-3 sm:text-base"
+                >
+                  📞 Позвонить
+                </a>
+              )}
+
+              {company.whatsapp && (
+                <a
+                  href={`https://wa.me/${company.whatsapp.replace("+", "")}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-xl bg-green-500 px-4 py-2.5 text-sm font-medium text-white sm:px-5 sm:py-3 sm:text-base"
+                >
+                  💬 WhatsApp
+                </a>
+              )}
+
+              {company.telegram && (
+                <a
+                  href={`https://t.me/${company.telegram.replace("@", "")}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-xl bg-blue-500 px-4 py-2.5 text-sm font-medium text-white sm:px-5 sm:py-3 sm:text-base"
+                >
+                  ✈ Telegram
+                </a>
+              )}
+
+            </div>
+
+          </div>
+        )}
+
+        {/* Агент */}
+        {property.agent && (
+          <div className="rounded-2xl border bg-white p-5 shadow-sm sm:p-6">
+
+            <h3 className="mb-2 text-lg font-bold sm:text-xl">
+              👤 {property.agent.name}
+            </h3>
+
+            <p className="mb-4 text-sm text-gray-500 sm:mb-5 sm:text-base">
+              Ваш специалист по объекту
+            </p>
+
+            <div className="flex flex-wrap gap-2 sm:gap-3">
+
+              {property.agent.phone && (
+                <a
+                  href={`tel:${property.agent.phone}`}
+                  className="rounded-xl bg-gray-900 px-4 py-2.5 text-sm font-medium text-white sm:px-5 sm:py-3 sm:text-base"
+                >
+                  📞 Позвонить
+                </a>
+              )}
+
+              {property.agent.phone && (
+                <a
+                  href={`https://wa.me/${property.agent.phone.replace("+", "")}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-xl bg-green-500 px-4 py-2.5 text-sm font-medium text-white sm:px-5 sm:py-3 sm:text-base"
+                >
+                  💬 WhatsApp
+                </a>
+              )}
+
+              {property.agent.telegram && (
+                <a
+                  href={`https://t.me/${property.agent.telegram.replace("@", "")}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-xl bg-blue-500 px-4 py-2.5 text-sm font-medium text-white sm:px-5 sm:py-3 sm:text-base"
+                >
+                  ✈ Telegram
+                </a>
+              )}
+
+            </div>
+
+          </div>
+        )}
+
+      </div>
+
+      {/* Подробные характеристики */}
+      <div className="mt-6 rounded-2xl border bg-white p-5 shadow sm:mt-8 sm:p-8">
+
+        <h2 className="mb-5 text-xl font-bold sm:mb-6 sm:text-2xl">
+          📋 Характеристики
+        </h2>
+
+        <div className="space-y-3 text-sm sm:text-base">
+
+          {property.price && (
+            <p>
+              <b>Цена:</b>{" "}
+              {Number(property.price).toLocaleString()}{" "}
+              {property.currency || "$"}
+            </p>
+          )}
+
+          {property.property_type && (
+            <p>
+              <b>Тип:</b> {property.property_type}
+            </p>
+          )}
+
+          {property.rooms && (
+            <p>
+              <b>Комнаты:</b> {property.rooms}
+            </p>
+          )}
+
+          {property.area && (
+            <p>
+              <b>Площадь:</b> {property.area} м²
+            </p>
+          )}
+
+          {property.floor && property.total_floors && (
+            <p>
+              <b>Этаж:</b> {property.floor}/{property.total_floors}
+            </p>
+          )}
+
+          {property.renovation &&
+            property.renovation !== "Ремонт не указан" && (
+              <p>
+                <b>Ремонт:</b> {property.renovation}
+              </p>
+            )}
+
+          {property.residential_complex && (
+            <p>
+              <b>ЖК:</b> {property.residential_complex}
+            </p>
+          )}
+
+          {property.address && (
+            <p>
+              <b>Адрес:</b> {property.address}
+            </p>
+          )}
+
+          {property.building_type && (
+            <p>
+              <b>Тип дома:</b> {property.building_type}
+            </p>
+          )}
+
+        </div>
+
+      </div>
+
+      {/* Описание */}
+      <div className="mt-6 rounded-2xl border bg-white p-5 shadow sm:mt-8 sm:p-8">
+
+        <h2 className="mb-4 text-xl font-bold sm:text-2xl">
+          📝 Описание
+        </h2>
+
+        <p className="whitespace-pre-line text-sm leading-7 sm:text-base">
+          {property.description || "Нет описания"}
+        </p>
+
+      </div>
 
     </main>
-
   );
-
 }
