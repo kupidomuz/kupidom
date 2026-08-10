@@ -1,8 +1,9 @@
 "use client";
+
 import { propertyTypes } from "@/data/propertyTypes";
 import { districts } from "@/data/districts";
 import { addProperty } from "@/lib/actions";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 function PhotoUploader({ 
   existingImages,
@@ -45,19 +46,29 @@ function PhotoUploader({
 
 export default function PropertyForm() {
 
-  const [hasPhoto, setHasPhoto] = useState(false);
-
+const [hasPhoto, setHasPhoto] = useState(false);
+const [isSubmitting, setIsSubmitting] = useState(false);
+const submittingRef = useRef(false);
   return (
     <form
-      action={addProperty}
-      onSubmit={(e) => {
-        if (!hasPhoto) {
-          e.preventDefault();
-          alert("Добавьте хотя бы одно фото объекта");
-        }
-      }}
-      className="space-y-8"
-    >
+  action={addProperty}
+  onSubmit={(e) => {
+    if (!hasPhoto) {
+      e.preventDefault();
+      alert("Добавьте хотя бы одно фото объекта");
+      return;
+    }
+
+    if (submittingRef.current) {
+      e.preventDefault();
+      return;
+    }
+
+    submittingRef.current = true;
+    setIsSubmitting(true);
+  }}
+  className="space-y-8"
+>
 
       <div>
         <h1 className="text-4xl font-bold">
@@ -476,16 +487,11 @@ export default function PropertyForm() {
 
      <button
   type="submit"
-  onClick={(e)=>{
-    if(!hasPhoto){
-      e.preventDefault();
-      alert("Добавьте хотя бы одно фото объекта");
-    }
-  }}
-        className="rounded-xl bg-red-600 px-10 py-4 text-lg font-semibold text-white hover:bg-red-700"
-      >
-        💾 Сохранить объект
-      </button>
+  disabled={isSubmitting}
+  className="rounded-xl bg-red-600 px-10 py-4 text-lg font-semibold text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
+>
+  {isSubmitting ? "⏳ Сохранение..." : "💾 Сохранить объект"}
+</button>
 
 
     </form>
