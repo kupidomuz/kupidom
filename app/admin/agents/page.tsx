@@ -12,7 +12,7 @@ export default async function AgentsPage() {
     .order("created_at", {
       ascending: false,
     });
-
+console.log("AGENTS:", agents);
 
 
   const agentsWithStats = await Promise.all(
@@ -40,7 +40,9 @@ export default async function AgentsPage() {
 
   );
 
-
+<p>
+  Найдено агентов: {agents?.length}
+</p>
 
   return (
 
