@@ -49,6 +49,7 @@ export default function PropertyForm() {
 const [hasPhoto, setHasPhoto] = useState(false);
 const [isSubmitting, setIsSubmitting] = useState(false);
 const submittingRef = useRef(false);
+const [propertyType, setPropertyType] = useState("");
   return (
     <form
   action={addProperty}
@@ -91,11 +92,7 @@ const submittingRef = useRef(false);
         <div className="grid gap-6 md:grid-cols-2">
 
 
-          <input
-            name="title"
-            placeholder="Название объекта"
-            className="rounded-xl border p-3"
-          />
+          
 
 
           <select
@@ -112,52 +109,41 @@ const submittingRef = useRef(false);
 
           </select>
 
-<select
-  name="category"
-  className="rounded-xl border p-3"
->
-  <option value="sale">
-    🏠 Купить
-  </option>
 
-  <option value="rent">
-    🔑 Аренда
-  </option>
-
-  <option value="newbuilding">
-    🏗 Новостройки
-  </option>
-
-  <option value="commercial">
-    🏢 Коммерция
-  </option>
-
-</select>
 
           <select
   name="propertyType"
+  value={propertyType}
+  onChange={(e) => setPropertyType(e.target.value)}
   className="rounded-xl border p-3"
+  required
 >
-
   <option value="">
-    Выберите тип
+    Выберите тип недвижимости
   </option>
 
-  {propertyTypes.map((type) => (
-    <option
-      key={type}
-      value={type}
-    >
-      {type}
-    </option>
-  ))}
+  <option value="Квартира">
+    🏠 Квартира
+  </option>
 
+  <option value="Дом">
+    🏡 Дом
+  </option>
+
+  <option value="Участок">
+    🌳 Участок
+  </option>
+
+  <option value="Коммерция">
+    🏢 Коммерция
+  </option>
 </select>
 
 
 <select
   name="district"
   className="rounded-xl border p-3"
+  required
 >
   <option value="">
     Выберите район
@@ -177,17 +163,20 @@ const submittingRef = useRef(false);
 
 
           <input
-            name="price"
-            type="number"
-            placeholder="Цена"
-            className="rounded-xl border p-3"
-          />
+  name="price"
+  type="number"
+  placeholder="Цена"
+  min="1"
+  required
+  className="rounded-xl border p-3"
+/>
 
 
 
           <select
             name="currency"
             className="rounded-xl border p-3"
+            required
           >
             <option>
               USD
@@ -208,60 +197,52 @@ const submittingRef = useRef(false);
 
 
 
-      {/* Статус объекта */}
+      {/* Отметки объекта */}
 
-      <div className="rounded-2xl border bg-white p-8 shadow-sm">
+<div className="rounded-2xl border bg-white p-8 shadow-sm">
 
-        <h2 className="mb-6 text-2xl font-bold">
-          ⭐ Статус объекта
-        </h2>
+  <h2 className="mb-6 text-2xl font-bold">
+    🏷️ Отметки объекта
+  </h2>
 
+  <div className="grid gap-4 md:grid-cols-3">
 
-        <div className="grid gap-6 md:grid-cols-2">
+    <label className="flex cursor-pointer items-center gap-3 rounded-xl border p-4">
+      <input
+        type="checkbox"
+        name="exclusive"
+        value="true"
+        className="h-5 w-5"
+      />
 
+      <span>⭐ Эксклюзивный объект</span>
+    </label>
 
-          <select
-            name="status"
-            className="rounded-xl border p-3"
-          >
+    <label className="flex cursor-pointer items-center gap-3 rounded-xl border p-4">
+      <input
+        type="checkbox"
+        name="urgent"
+        value="true"
+        className="h-5 w-5"
+      />
 
-            <option value="active">
-              🟢 Активный
-            </option>
+      <span>🔥 Срочно</span>
+    </label>
 
+    <label className="flex cursor-pointer items-center gap-3 rounded-xl border p-4">
+      <input
+        type="checkbox"
+        name="low_price"
+        value="true"
+        className="h-5 w-5"
+      />
 
-            <option value="sold">
-              ✅ Продан
-            </option>
+      <span>💰 Низкая цена</span>
+    </label>
 
+  </div>
 
-            <option value="hidden">
-              ❌ Скрыт
-            </option>
-
-
-          </select>
-
-
-
-          <label className="flex items-center gap-3 rounded-xl border p-3">
-
-            <input
-              type="checkbox"
-              name="exclusive"
-              value="true"
-              className="h-5 w-5"
-            />
-
-            ⭐ Эксклюзивный объект
-
-          </label>
-
-
-        </div>
-
-
-      </div>
+</div>
 
 
 
@@ -321,36 +302,50 @@ const submittingRef = useRef(false);
           />
 
 
-          <input
-            name="rooms"
-            type="number"
-            placeholder="Количество комнат"
-            className="rounded-xl border p-3"
-          />
+          {propertyType === "Квартира" && (
+  <input
+    name="rooms"
+    type="number"
+    min="1"
+    placeholder="Количество комнат"
+    required
+    className="rounded-xl border p-3"
+  />
+)}
 
 
           <input
-            name="area"
-            type="number"
-            placeholder="Площадь м²"
-            className="rounded-xl border p-3"
-          />
+  name="area"
+  type="number"
+  placeholder="Площадь м²"
+  min="1"
+  required
+  className="rounded-xl border p-3"
+/>
 
 
-          <input
-            name="floor"
-            type="number"
-            placeholder="Этаж"
-            className="rounded-xl border p-3"
-          />
+          {propertyType === "Квартира" && (
+  <input
+    name="floor"
+    type="number"
+    min="1"
+    placeholder="Этаж"
+    required
+    className="rounded-xl border p-3"
+  />
+)}
 
 
-          <input
-            name="total_floors"
-            type="number"
-            placeholder="Этажность"
-            className="rounded-xl border p-3"
-          />
+          {propertyType === "Квартира" && (
+  <input
+    name="total_floors"
+    type="number"
+    min="1"
+    placeholder="Этажность дома"
+    required
+    className="rounded-xl border p-3"
+  />
+)}
 
 
           <select

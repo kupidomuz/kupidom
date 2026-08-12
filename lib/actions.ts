@@ -255,7 +255,14 @@ currency: String(
     status: "active",
 
 
-    exclusive: false,
+    exclusive:
+  formData.get("exclusive") === "true",
+
+urgent:
+  formData.get("urgent") === "true",
+
+low_price:
+  formData.get("low_price") === "true",
 
 
     agent_id:

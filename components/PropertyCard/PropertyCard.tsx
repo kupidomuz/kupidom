@@ -16,17 +16,42 @@ export default function PropertyCard({
     >
 
 
-      <img
-        src={
-          property.images?.[0] ||
-          "/images/no-image.jpg"
-        }
-        alt={
-          property.title || "Объект"
-        }
-        className="h-56 w-full object-cover"
-      />
+      <div className="relative">
 
+  <img
+    src={
+      property.images?.[0] ||
+      "/images/no-image.jpg"
+    }
+    alt={
+      property.title || "Объект"
+    }
+    className="h-56 w-full object-cover"
+  />
+
+  <div className="absolute left-3 top-3 flex flex-wrap gap-2">
+
+    {property.exclusive && (
+      <span className="rounded-full bg-yellow-400 px-3 py-1 text-sm font-semibold text-black shadow">
+        ⭐ Эксклюзив
+      </span>
+    )}
+
+    {property.urgent && (
+      <span className="rounded-full bg-red-600 px-3 py-1 text-sm font-semibold text-white shadow">
+        🔥 Срочно
+      </span>
+    )}
+
+    {property.low_price && (
+      <span className="rounded-full bg-green-600 px-3 py-1 text-sm font-semibold text-white shadow">
+        💰 Низкая цена
+      </span>
+    )}
+
+  </div>
+
+</div>
 
 
       <div className="p-5">

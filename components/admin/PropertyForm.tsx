@@ -138,61 +138,49 @@ export default async function PropertyForm() {
 
 
 
-      {/* Статус объекта */}
+      {/* Отметки объекта */}
 
-      <div className="rounded-2xl border bg-white p-8 shadow-sm">
+<div className="rounded-2xl border bg-white p-8 shadow-sm">
 
-        <h2 className="mb-6 text-2xl font-bold">
-          ⭐ Статус объекта
-        </h2>
+  <h2 className="mb-6 text-2xl font-bold">
+    🏷️ Отметки объекта
+  </h2>
 
+  <div className="grid gap-4 md:grid-cols-3">
 
-        <div className="grid gap-6 md:grid-cols-2">
+    <label className="flex cursor-pointer items-center gap-3 rounded-xl border p-4">
+      <input
+        type="checkbox"
+        name="exclusive"
+        value="true"
+        className="h-5 w-5"
+      />
+      <span>⭐ Эксклюзивный объект</span>
+    </label>
 
+    <label className="flex cursor-pointer items-center gap-3 rounded-xl border p-4">
+      <input
+        type="checkbox"
+        name="urgent"
+        value="true"
+        className="h-5 w-5"
+      />
+      <span>🔥 Срочно</span>
+    </label>
 
-          <select
-            name="status"
-            className="rounded-xl border p-3"
-          >
+    <label className="flex cursor-pointer items-center gap-3 rounded-xl border p-4">
+      <input
+        type="checkbox"
+        name="low_price"
+        value="true"
+        className="h-5 w-5"
+      />
+      <span>💰 Низкая цена</span>
+    </label>
 
-            <option value="active">
-              🟢 Активный
-            </option>
+  </div>
 
-
-            <option value="sold">
-              ✅ Продан
-            </option>
-
-
-            <option value="hidden">
-              ❌ Скрыт
-            </option>
-
-
-          </select>
-
-
-
-          <label className="flex items-center gap-3 rounded-xl border p-3">
-
-            <input
-              type="checkbox"
-              name="exclusive"
-              value="true"
-              className="h-5 w-5"
-            />
-
-            ⭐ Эксклюзивный объект
-
-          </label>
-
-
-        </div>
-
-
-      </div>
-
+</div>
 
 
 

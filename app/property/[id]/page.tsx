@@ -59,28 +59,40 @@ export default async function PublicPropertyPage({
           {property.currency || "$"}
         </p>
 
-        {/* Статусы */}
-        <div className="mt-4 flex flex-wrap gap-2">
+        {/* Статусы и отметки */}
+<div className="mt-4 flex flex-wrap gap-2">
 
-          <span className="rounded-full bg-green-100 px-3 py-1.5 text-sm text-green-700 sm:px-4 sm:py-2">
-            {property.deal_type === "rent"
-              ? "🏠 Аренда"
-              : "🏷 Продажа"}
-          </span>
+  <span className="rounded-full bg-green-100 px-3 py-1.5 text-sm text-green-700 sm:px-4 sm:py-2">
+    {property.deal_type === "rent"
+      ? "🏠 Аренда"
+      : "🏷 Продажа"}
+  </span>
 
-          {property.status === "sold" && (
-            <span className="rounded-full bg-gray-200 px-3 py-1.5 text-sm text-gray-700 sm:px-4 sm:py-2">
-              ✅ Продан
-            </span>
-          )}
+  {property.exclusive && (
+    <span className="rounded-full bg-red-100 px-3 py-1.5 text-sm font-medium text-red-700 sm:px-4 sm:py-2">
+      ⭐ Эксклюзив
+    </span>
+  )}
 
-          {property.exclusive && (
-            <span className="rounded-full bg-red-100 px-3 py-1.5 text-sm text-red-700 sm:px-4 sm:py-2">
-              ⭐ Эксклюзив
-            </span>
-          )}
+  {property.urgent && (
+    <span className="rounded-full bg-orange-100 px-3 py-1.5 text-sm font-medium text-orange-700 sm:px-4 sm:py-2">
+      🔥 Срочно
+    </span>
+  )}
 
-        </div>
+  {property.low_price && (
+    <span className="rounded-full bg-green-100 px-3 py-1.5 text-sm font-medium text-green-700 sm:px-4 sm:py-2">
+      💰 Низкая цена
+    </span>
+  )}
+
+  {property.status === "sold" && (
+    <span className="rounded-full bg-gray-200 px-3 py-1.5 text-sm text-gray-700 sm:px-4 sm:py-2">
+      ✅ Продан
+    </span>
+  )}
+
+</div>
 
       </div>
 
