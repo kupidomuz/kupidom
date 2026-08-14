@@ -170,7 +170,23 @@ const [propertyType, setPropertyType] = useState("");
   required
   className="rounded-xl border p-3"
 />
+<input
+  name="owner_price"
+  type="number"
+  min="0"
+  placeholder="Цена на руки"
+  className="rounded-xl border p-3"
+/>
 
+<input
+  name="commission_percent"
+  type="number"
+  min="0"
+  max="100"
+  step="0.1"
+  placeholder="Комиссия агентства (%)"
+  className="rounded-xl border p-3"
+/>
 
 
           <select
@@ -272,133 +288,149 @@ const [propertyType, setPropertyType] = useState("");
 
       <div className="rounded-2xl border bg-white p-8 shadow-sm">
 
+  <h2 className="mb-8 text-2xl font-bold">
+    📍 Характеристики объекта
+  </h2>
 
-        <h2 className="mb-8 text-2xl font-bold">
-          📍 Характеристики объекта
-        </h2>
+  <div className="grid gap-6 md:grid-cols-2">
 
+    {/* Адрес */}
+    <input
+      name="address"
+      placeholder="Адрес"
+      className="rounded-xl border p-3"
+    />
 
-        <div className="grid gap-6 md:grid-cols-2">
+    {/* Ориентир */}
+    <input
+      name="landmark"
+      placeholder="Ориентир"
+      className="rounded-xl border p-3"
+    />
 
+    {/* ЖК — только квартира */}
+    {propertyType === "Квартира" && (
+      <input
+        name="residential_complex"
+        placeholder="ЖК / Комплекс"
+        className="rounded-xl border p-3"
+      />
+    )}
 
-          <input
-            name="address"
-            placeholder="Адрес"
-            className="rounded-xl border p-3"
-          />
+    {/* Количество комнат — квартира и дом */}
+    {(propertyType === "Квартира" || propertyType === "Дом") && (
+      <input
+        name="rooms"
+        type="number"
+        min="1"
+        placeholder="Количество комнат"
+        className="rounded-xl border p-3"
+      />
+    )}
 
+    {/* Площадь */}
+    <input
+      name="area"
+      type="number"
+      min="1"
+      placeholder={
+        propertyType === "Участок"
+          ? "Площадь участка, соток"
+          : propertyType === "Дом"
+            ? "Площадь дома, м²"
+            : "Площадь, м²"
+      }
+      className="rounded-xl border p-3"
+      required
+    />
 
-          <input
-            name="landmark"
-            placeholder="Ориентир"
-            className="rounded-xl border p-3"
-          />
+    {/* Площадь участка — только дом */}
+    {propertyType === "Дом" && (
+      <input
+        name="land_area"
+        type="number"
+        min="0.1"
+        step="0.1"
+        placeholder="Площадь участка, соток"
+        className="rounded-xl border p-3"
+      />
+    )}
 
+    {/* Этаж — квартира и коммерция */}
+    {(propertyType === "Квартира" ||
+      propertyType === "Коммерция") && (
+      <input
+        name="floor"
+        type="number"
+        min="1"
+        placeholder="Этаж"
+        className="rounded-xl border p-3"
+      />
+    )}
 
-          <input
-            name="residential_complex"
-            placeholder="ЖК / Комплекс"
-            className="rounded-xl border p-3"
-          />
+    {/* Этажность — квартира, дом, коммерция */}
+    {(propertyType === "Квартира" ||
+      propertyType === "Дом" ||
+      propertyType === "Коммерция") && (
+      <input
+        name="total_floors"
+        type="number"
+        min="1"
+        placeholder="Этажность"
+        className="rounded-xl border p-3"
+      />
+    )}
 
+    {/* Ремонт — квартира, дом, коммерция */}
+    {(propertyType === "Квартира" ||
+      propertyType === "Дом" ||
+      propertyType === "Коммерция") && (
+      <select
+        name="renovation"
+        className="rounded-xl border p-3"
+      >
+        <option value="">
+          Ремонт не указан
+        </option>
 
-          {propertyType === "Квартира" && (
-  <input
-    name="rooms"
-    type="number"
-    min="1"
-    placeholder="Количество комнат"
-    required
-    className="rounded-xl border p-3"
-  />
-)}
+        <option value="Евроремонт">
+          Евроремонт
+        </option>
 
+        <option value="Хороший ремонт">
+          Хороший ремонт
+        </option>
 
-          <input
-  name="area"
-  type="number"
-  placeholder="Площадь м²"
-  min="1"
-  required
-  className="rounded-xl border p-3"
-/>
+        <option value="Без ремонта">
+          Без ремонта
+        </option>
+      </select>
+    )}
 
+    {/* Тип дома — квартира и дом */}
+    {(propertyType === "Квартира" ||
+      propertyType === "Дом") && (
+      <select
+        name="building_type"
+        className="rounded-xl border p-3"
+      >
+        <option value="">
+          Тип дома не указан
+        </option>
 
-          {propertyType === "Квартира" && (
-  <input
-    name="floor"
-    type="number"
-    min="1"
-    placeholder="Этаж"
-    required
-    className="rounded-xl border p-3"
-  />
-)}
+        <option value="Новостройка">
+          Новостройка
+        </option>
 
+        <option value="Вторичный рынок">
+          Вторичный рынок
+        </option>
+      </select>
+    )}
 
-          {propertyType === "Квартира" && (
-  <input
-    name="total_floors"
-    type="number"
-    min="1"
-    placeholder="Этажность дома"
-    required
-    className="rounded-xl border p-3"
-  />
-)}
+  </div>
 
-
-          <select
-            name="renovation"
-            className="rounded-xl border p-3"
-          >
-
-            <option>
-              Ремонт не указан
-            </option>
-
-            <option>
-              Евроремонт
-            </option>
-
-            <option>
-              Хороший ремонт
-            </option>
-
-            <option>
-              Без ремонта
-            </option>
-
-
-          </select>
-
-
-
-          <select
-            name="building_type"
-            className="rounded-xl border p-3"
-          >
-
-            <option>
-              Тип дома не указан
-            </option>
-
-            <option>
-              Новостройка
-            </option>
-
-            <option>
-              Вторичный рынок
-            </option>
-
-
-          </select>
-
-
-        </div>
-
-
-      </div>
+</div>
 
 
 

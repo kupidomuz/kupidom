@@ -63,7 +63,12 @@ export default function Header() {
           >
             Каталог
           </Link>
-
+          <Link
+  href="/#contacts"
+  className="hidden rounded-xl bg-red-600 px-4 py-2 font-semibold text-white transition hover:bg-red-700 sm:inline-flex lg:px-5 lg:py-3"
+>
+  📞 Связаться
+</Link>
           {/* Вход на компьютере */}
           <Link
             href="/login"
@@ -125,7 +130,13 @@ export default function Header() {
             </Link>
 
             <div className="my-2 border-t" />
-
+<Link
+  href="/#contacts"
+  onClick={() => setMenuOpen(false)}
+  className="mb-2 rounded-xl bg-red-600 px-4 py-3 text-center font-semibold text-white"
+>
+  📞 Связаться с агентством
+</Link>
             <Link
               href="/properties"
               onClick={() => setMenuOpen(false)}

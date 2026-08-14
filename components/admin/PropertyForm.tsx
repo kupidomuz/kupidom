@@ -1,10 +1,14 @@
+"use client";
+
 import { addProperty } from "@/lib/actions";
 import PhotoUploader from "./PhotoUploader";
-import { getAgents } from "@/lib/userService";
+import { useState } from "react";
 
-export default async function PropertyForm() {
+export default function PropertyForm() {
+  const [propertyType, setPropertyType] = useState("");
+const [category, setCategory] = useState("sale");
 
-  const agents = await getAgents();
+
 
   return (
     <form action={addProperty} className="space-y-8">
@@ -30,11 +34,7 @@ export default async function PropertyForm() {
         <div className="grid gap-6 md:grid-cols-2">
 
 
-          <input
-            name="title"
-            placeholder="Название объекта"
-            className="rounded-xl border p-3"
-          />
+         
 
 
           <select
@@ -53,7 +53,8 @@ export default async function PropertyForm() {
 
 <select
   name="category"
-  defaultValue="sale"
+  value={category}
+  onChange={(e) => setCategory(e.target.value)}
   className="rounded-xl border p-3"
 >
   <option value="sale">
@@ -71,30 +72,42 @@ export default async function PropertyForm() {
   <option value="commercial">
     🏢 Коммерция
   </option>
-
 </select>
 
           <select
-            name="propertyType"
-            className="rounded-xl border p-3"
-          >
-            <option>
-              Квартира
-            </option>
+  name="propertyType"
+  value={propertyType}
+  onChange={(e) => {
+  const value = e.target.value;
+  setPropertyType(value);
 
-            <option>
-              Дом
-            </option>
+  if (value === "Коммерция") {
+    setCategory("commercial");
+  }
+}}
+  className="rounded-xl border p-3"
+  required
+>
+  <option value="">
+    Выберите тип недвижимости
+  </option>
 
-            <option>
-              Коммерция
-            </option>
+  <option value="Квартира">
+    🏠 Квартира
+  </option>
 
-            <option>
-              Участок
-            </option>
+  <option value="Дом">
+    🏡 Дом
+  </option>
 
-          </select>
+  <option value="Участок">
+    🌳 Участок
+  </option>
+
+  <option value="Коммерция">
+    🏢 Коммерция
+  </option>
+</select>
 
 
 
@@ -112,7 +125,23 @@ export default async function PropertyForm() {
             placeholder="Цена"
             className="rounded-xl border p-3"
           />
+          <input
+  name="owner_price"
+  type="number"
+  min="0"
+  placeholder="Цена на руки"
+  className="rounded-xl border p-3"
+/>
 
+
+<input
+  name="commission_percent"
+  type="number"
+  placeholder="Комиссия агентства (%)"
+  min="0"
+  step="0.1"
+  className="rounded-xl border p-3"
+/>
 
 
           <select
@@ -232,91 +261,134 @@ export default async function PropertyForm() {
           />
 
 
-          <input
-            name="residential_complex"
-            placeholder="ЖК / Комплекс"
-            className="rounded-xl border p-3"
-          />
+          
+  {propertyType === "Квартира" && (
+  <input
+    name="residential_complex"
+    placeholder="ЖК / Комплекс"
+    className="rounded-xl border p-3"
+  />
+)}
+
+
+          {propertyType === "Квартира" && (
+  <input
+    name="rooms"
+    type="number"
+    min="1"
+    placeholder="Количество комнат"
+    required
+    className="rounded-xl border p-3"
+  />
+)}
+
+{propertyType === "Дом" && (
+  <input
+    name="rooms"
+    type="number"
+    min="1"
+    placeholder="Количество комнат"
+    className="rounded-xl border p-3"
+  />
+)}
 
 
           <input
-            name="rooms"
-            type="number"
-            placeholder="Количество комнат"
-            className="rounded-xl border p-3"
-          />
+  name="area"
+  type="number"
+  min="1"
+  placeholder={
+    propertyType === "Участок"
+      ? "Площадь участка, соток"
+      : "Площадь м²"
+  }
+  required
+  className="rounded-xl border p-3"
+/>
+{propertyType === "Дом" && (
+  <input
+    name="land_area"
+    type="number"
+    min="0.1"
+    step="0.1"
+    placeholder="Площадь участка, соток"
+    required
+    className="rounded-xl border p-3"
+  />
+)}
+
+          {(propertyType === "Квартира" ||
+  propertyType === "Коммерция") && (
+  <input
+    name="floor"
+    type="number"
+    min="1"
+    placeholder="Этаж"
+    required={propertyType === "Квартира"}
+    className="rounded-xl border p-3"
+  />
+)}
 
 
-          <input
-            name="area"
-            type="number"
-            placeholder="Площадь м²"
-            className="rounded-xl border p-3"
-          />
+          {(propertyType === "Квартира" ||
+  propertyType === "Дом" ||
+  propertyType === "Коммерция") && (
+  <input
+    name="total_floors"
+    type="number"
+    min="1"
+    placeholder="Этажность"
+    className="rounded-xl border p-3"
+  />
+)}
 
 
-          <input
-            name="floor"
-            type="number"
-            placeholder="Этаж"
-            className="rounded-xl border p-3"
-          />
+          {(propertyType === "Квартира" ||
+  propertyType === "Дом" ||
+  propertyType === "Коммерция") && (
+  <select
+    name="renovation"
+    className="rounded-xl border p-3"
+  >
+    <option value="">
+      Ремонт не указан
+    </option>
 
+    <option value="Евроремонт">
+      Евроремонт
+    </option>
 
-          <input
-            name="total_floors"
-            type="number"
-            placeholder="Этажность"
-            className="rounded-xl border p-3"
-          />
+    <option value="Хороший ремонт">
+      Хороший ремонт
+    </option>
 
-
-          <select
-            name="renovation"
-            className="rounded-xl border p-3"
-          >
-
-            <option>
-              Ремонт не указан
-            </option>
-
-            <option>
-              Евроремонт
-            </option>
-
-            <option>
-              Хороший ремонт
-            </option>
-
-            <option>
-              Без ремонта
-            </option>
-
-
-          </select>
+    <option value="Без ремонта">
+      Без ремонта
+    </option>
+  </select>
+)}
 
 
 
-          <select
-            name="building_type"
-            className="rounded-xl border p-3"
-          >
+          {(propertyType === "Квартира" ||
+  propertyType === "Дом") && (
+  <select
+    name="building_type"
+    className="rounded-xl border p-3"
+  >
+    <option value="">
+      Тип дома не указан
+    </option>
 
-            <option>
-              Тип дома не указан
-            </option>
+    <option value="Новостройка">
+      Новостройка
+    </option>
 
-            <option>
-              Новостройка
-            </option>
-
-            <option>
-              Вторичный рынок
-            </option>
-
-
-          </select>
-
+    <option value="Вторичный рынок">
+      Вторичный рынок
+    </option>
+  </select>
+)}
 
         </div>
 
@@ -385,28 +457,7 @@ export default async function PropertyForm() {
   />
 
 
-  <select
-    name="agent_id"
-    className="rounded-xl border p-3"
-  >
-
-    <option value="">
-      Без агента
-    </option>
-
-    {agents.map((agent:any) => (
-
-      <option
-        key={agent.id}
-        value={agent.id}
-      >
-        {agent.name}
-      </option>
-
-    ))}
-
-  </select>
-
+  
 
 </div>
 

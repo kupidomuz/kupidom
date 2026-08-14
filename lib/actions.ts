@@ -152,9 +152,12 @@ if (userCookie) {
 deal_type: String(
   formData.get("dealType") || ""
 ),
-category: String(
-  formData.get("category") || ""
-),
+category:
+  propertyType === "Коммерция"
+    ? "commercial"
+    : String(
+        formData.get("category") || ""
+      ),
 property_type: String(
   formData.get("propertyType") || ""
 ),
@@ -187,9 +190,17 @@ currency: String(
     price: Number(
       formData.get("price") || 0
     ),
+owner_price: Number(
+  formData.get("owner_price") || 0
+),
 
+commission_percent: Number(
+  formData.get("commission_percent") || 0
+),
 
-    
+    land_area: Number(
+  formData.get("land_area") || 0
+),
 
 
     address: String(
@@ -367,8 +378,16 @@ currency: String(
     price: Number(
       formData.get("price") || 0
     ),
+owner_price: Number(
+  formData.get("owner_price") || 0
+),
 
-
+commission_percent: Number(
+  formData.get("commission_percent") || 0
+),
+land_area: Number(
+  formData.get("land_area") || 0
+),
     address: String(
       formData.get("address") || ""
     ),

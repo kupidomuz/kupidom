@@ -71,9 +71,23 @@ export default async function PropertiesCatalog() {
               </div>
 
               {/* Название */}
-              <h3 className="mb-4 line-clamp-2 text-lg font-bold sm:text-xl">
-                {property.title}
-              </h3>
+<h3 className="mb-2 line-clamp-2 text-lg font-bold sm:text-xl">
+  {property.title ||
+    (property.property_type === "Квартира" && property.rooms
+      ? `${property.rooms}-комнатная квартира`
+      : property.property_type === "Дом"
+      ? "Дом"
+      : property.property_type === "Участок"
+      ? "Участок"
+      : property.property_type === "Коммерция"
+      ? "Коммерческая недвижимость"
+      : "Объект недвижимости")}
+</h3>
+
+{/* Цена */}
+<p className="mb-4 text-xl font-bold text-red-600">
+  {Number(property.price).toLocaleString("ru-RU")} {property.currency || "USD"}
+</p>
 
               {/* Характеристики */}
               <div className="grid grid-cols-2 gap-2 text-sm">

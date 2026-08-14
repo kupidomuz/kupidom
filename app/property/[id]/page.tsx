@@ -48,18 +48,29 @@ export default async function PublicPropertyPage({
       <div className="mb-6 mt-6 sm:mb-8 sm:mt-8">
 
         <h1 className="text-2xl font-bold leading-tight sm:text-3xl lg:text-4xl">
-          {property.rooms
-            ? `${property.rooms}-комнатная `
-            : ""}
-          {property.property_type || "Недвижимость"}
-        </h1>
+  {property.property_type === "Квартира"
+    ? `${property.rooms > 0 ? `${property.rooms}-комнатная ` : ""}квартира`
+    : property.property_type === "Дом"
+      ? "Частный дом"
+      : property.property_type === "Участок"
+        ? "Земельный участок"
+        : property.property_type === "Коммерция"
+          ? "Коммерческая недвижимость"
+          : "Недвижимость"}
+
+  {property.residential_complex && (
+    <span className="block mt-1 text-lg font-medium text-gray-500 sm:text-xl">
+      {property.residential_complex}
+    </span>
+  )}
+</h1>
 
         <p className="mt-3 text-2xl font-bold text-red-600 sm:text-3xl">
           {Number(property.price).toLocaleString()}{" "}
           {property.currency || "$"}
         </p>
 
-        {/* Статусы и отметки */}
+       {/* Статусы */}
 <div className="mt-4 flex flex-wrap gap-2">
 
   <span className="rounded-full bg-green-100 px-3 py-1.5 text-sm text-green-700 sm:px-4 sm:py-2">
@@ -69,19 +80,19 @@ export default async function PublicPropertyPage({
   </span>
 
   {property.exclusive && (
-    <span className="rounded-full bg-red-100 px-3 py-1.5 text-sm font-medium text-red-700 sm:px-4 sm:py-2">
+    <span className="rounded-full bg-red-100 px-3 py-1.5 text-sm text-red-700 sm:px-4 sm:py-2">
       ⭐ Эксклюзив
     </span>
   )}
 
   {property.urgent && (
-    <span className="rounded-full bg-orange-100 px-3 py-1.5 text-sm font-medium text-orange-700 sm:px-4 sm:py-2">
+    <span className="rounded-full bg-orange-100 px-3 py-1.5 text-sm text-orange-700 sm:px-4 sm:py-2">
       🔥 Срочно
     </span>
   )}
 
   {property.low_price && (
-    <span className="rounded-full bg-green-100 px-3 py-1.5 text-sm font-medium text-green-700 sm:px-4 sm:py-2">
+    <span className="rounded-full bg-green-100 px-3 py-1.5 text-sm text-green-700 sm:px-4 sm:py-2">
       💰 Низкая цена
     </span>
   )}
@@ -97,39 +108,59 @@ export default async function PublicPropertyPage({
       </div>
 
       {/* Характеристики */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+<div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
 
-        {property.rooms && (
-          <div className="rounded-xl bg-gray-100 p-3 text-sm sm:p-4 sm:text-base">
-            🛏 {property.rooms} комнат
-          </div>
-        )}
+  {/* Комнаты — только для квартиры */}
+  {property.property_type === "Квартира" && property.rooms > 0 && (
+    <div className="rounded-xl bg-gray-100 p-3 text-sm sm:p-4 sm:text-base">
+      🛏 {property.rooms} комнат
+    </div>
+  )}
 
-        {property.area && (
-          <div className="rounded-xl bg-gray-100 p-3 text-sm sm:p-4 sm:text-base">
-            📐 {property.area} м²
-          </div>
-        )}
+  {/* Площадь — если указана */}
+  {property.area > 0 && (
+    <div className="rounded-xl bg-gray-100 p-3 text-sm sm:p-4 sm:text-base">
+      📐 {property.area} м²
+    </div>
+  )}
 
-        {property.floor && property.total_floors && (
-          <div className="rounded-xl bg-gray-100 p-3 text-sm sm:p-4 sm:text-base">
-            🏢 {property.floor}/{property.total_floors} этаж
-          </div>
-        )}
-
-        {property.property_type && (
-          <div className="rounded-xl bg-gray-100 p-3 text-sm sm:p-4 sm:text-base">
-            🏠 {property.property_type}
-          </div>
-        )}
-
+  {/* Этаж — только для квартиры */}
+  {property.property_type === "Квартира" &&
+    property.floor > 0 &&
+    property.total_floors > 0 && (
+      <div className="rounded-xl bg-gray-100 p-3 text-sm sm:p-4 sm:text-base">
+        🏢 {property.floor}/{property.total_floors} этаж
       </div>
+    )}
+
+  {/* Тип недвижимости */}
+  {property.property_type && (
+    <div className="rounded-xl bg-gray-100 p-3 text-sm sm:p-4 sm:text-base">
+      🏠 {property.property_type}
+    </div>
+  )}
+
+</div>
 
       {/* ID */}
       <div className="mt-4 text-sm text-gray-500">
         ID: {property.property_code}
       </div>
+{(property.district || property.landmark || property.address) && (
+  <div className="mt-3 space-y-1 text-gray-600">
+    {property.district && (
+      <p>📍 <b>Район:</b> {property.district}</p>
+    )}
 
+    {property.landmark && (
+      <p>🧭 <b>Ориентир:</b> {property.landmark}</p>
+    )}
+
+    {property.address && (
+      <p>🏠 <b>Адрес:</b> {property.address}</p>
+    )}
+  </div>
+)}
       {/* Контакты */}
       <div className="mt-6 grid gap-4 sm:mt-8 md:grid-cols-2">
 
@@ -257,12 +288,22 @@ export default async function PublicPropertyPage({
               <b>Тип:</b> {property.property_type}
             </p>
           )}
+{property.district && (
+  <p>
+    <b>Район:</b> {property.district}
+  </p>
+)}
 
-          {property.rooms && (
-            <p>
-              <b>Комнаты:</b> {property.rooms}
-            </p>
-          )}
+{property.landmark && (
+  <p>
+    <b>Ориентир:</b> {property.landmark}
+  </p>
+)}
+          {property.property_type === "Квартира" && property.rooms > 0 && (
+  <p>
+    <b>Комнаты:</b> {property.rooms}
+  </p>
+)}
 
           {property.area && (
             <p>
@@ -270,11 +311,13 @@ export default async function PublicPropertyPage({
             </p>
           )}
 
-          {property.floor && property.total_floors && (
-            <p>
-              <b>Этаж:</b> {property.floor}/{property.total_floors}
-            </p>
-          )}
+          {property.property_type === "Квартира" &&
+  property.floor > 0 &&
+  property.total_floors > 0 && (
+    <p>
+      <b>Этаж:</b> {property.floor}/{property.total_floors}
+    </p>
+  )}
 
           {property.renovation &&
             property.renovation !== "Ремонт не указан" && (
