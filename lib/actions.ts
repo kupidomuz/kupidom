@@ -315,7 +315,7 @@ low_price:
     "/admin/properties"
   );
 
-
+revalidatePath("/");
   redirect(
     "/admin/properties"
   );
