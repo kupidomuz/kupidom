@@ -31,13 +31,22 @@ export default async function PropertiesPage({
     (property: any) => {
 
 
-      if (
-        params.category &&
-        property.category !== params.category
-      ) {
-        return false;
-      }
+      if (params.category) {
+  if (
+    params.category === "rent" &&
+    property.category !== "rent" &&
+    property.deal_type !== "rent"
+  ) {
+    return false;
+  }
 
+  if (
+    params.category !== "rent" &&
+    property.category !== params.category
+  ) {
+    return false;
+  }
+}
 
 
       if (

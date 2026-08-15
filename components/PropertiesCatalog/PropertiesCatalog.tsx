@@ -1,10 +1,14 @@
 import Link from "next/link";
 import { getProperties } from "@/lib/propertyService";
 
-export default async function PropertiesCatalog() {
-  const properties = await getProperties();
+export default async function PropertiesCatalog({
+  properties,
+}: {
+  properties?: any[];
+}) {
+  const allProperties = properties ?? (await getProperties());
 
-  const items = properties
+  const items = allProperties
     .filter((property: any) => property.status === "active")
     .slice(0, 6);
 
