@@ -13,8 +13,20 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "KupiDom",
-  description: "Агентство недвижимости KupiDom",
+  title: "KupiDom — агентство недвижимости в Ташкенте",
+  description:
+    "KupiDom — агентство недвижимости в Ташкенте. Поможем купить, продать, снять или сдать квартиру, дом, участок и коммерческую недвижимость. Консультация и полное сопровождение сделок.",
+  keywords: [
+    "агентство недвижимости Ташкент",
+    "купить квартиру Ташкент",
+    "продать квартиру Ташкент",
+    "аренда квартиры Ташкент",
+    "купить дом Ташкент",
+    "купить участок Ташкент",
+    "коммерческая недвижимость Ташкент",
+    "новостройки Ташкент",
+    "KupiDom",
+  ],
 };
 
 export default function RootLayout({
@@ -24,7 +36,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="ru"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>

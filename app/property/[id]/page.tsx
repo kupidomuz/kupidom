@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import PropertyGallery from "@/components/PropertyGallery";
 import {
   getPropertyById,
@@ -7,7 +8,94 @@ import ShareButton from "@/components/ShareButton";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
 
+  const property = await getPropertyById(id);
+
+  if (!property) {
+    return {
+      title: "Объект не найден — KupiDom",
+      description: "Объект недвижимости не найден.",
+    };
+  }
+
+  const type =
+    property.property_type === "Квартира"
+      ? `${property.rooms > 0 ? `${property.rooms}-комнатная ` : ""}квартира`
+      : property.property_type === "Дом"
+        ? "частный дом"
+        : property.property_type === "Участок"
+          ? "земельный участок"
+          : property.property_type === "Коммерция"
+            ? "коммерческая недвижимость"
+            : "недвижимость";
+
+  const deal =
+    property.deal_type === "rent"
+      ? "Аренда"
+      : "Продажа";
+
+  const location = [
+    property.district,
+    "Ташкент",
+  ]
+    .filter(Boolean)
+    .join(", ");
+
+  const title = `${deal}: ${type}${location ? ` в ${location}` : ""} — KupiDom`;
+
+  const descriptionParts = [
+    `${deal}: ${type}`,
+    property.area > 0 ? `${property.area} м²` : "",
+    property.district ? property.district : "",
+    property.residential_complex
+      ? `ЖК ${property.residential_complex}`
+      : "",
+    property.price
+      ? `Цена ${Number(property.price).toLocaleString("ru-RU")} ${property.currency || "USD"}`
+      : "",
+  ].filter(Boolean);
+
+  const description =
+    `${descriptionParts.join(". ")}. ` +
+    "Актуальное объявление, фотографии и подробности на KupiDom.";
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `https://kupidom.uz/property/${id}`,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `https://kupidom.uz/property/${id}`,
+      siteName: "KupiDom",
+      locale: "ru_RU",
+      type: "website",
+      images:
+        property.images?.length > 0
+          ? [
+              {
+                url: property.images[0],
+                width: 1200,
+                height: 630,
+                alt: title,
+              },
+            ]
+          : [],
+    },
+    robots: {
+      index: property.status === "active",
+      follow: true,
+    },
+  };
+}
 export default async function PublicPropertyPage({
   params,
 }: {
